@@ -1,0 +1,28 @@
+[project]
+name = "ai-news"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "shanmukhigandham-sigfyn", email = "163397275+shanmukhigandham-sigfyn@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "httpx>=0.28.0",
+    "feedparser>=6.0.0",
+    "pydantic-settings>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "google-genai>=1.0.0",
+    "python-telegram-bot>=21.0",
+    "apscheduler>=3.10.0",
+    "jinja2>=3.1.0",
+]
+
+[project.scripts]
+ai-news = "ai_news:main"
+
+[build-system]
+requires = ["uv_build>=0.12.2,<0.13.0"]
+build-backend = "uv_build"
