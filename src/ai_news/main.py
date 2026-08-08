@@ -7,6 +7,7 @@ from fastapi import FastAPI
 from .models import Digest
 from .research import RSSCollector, GitHubCollector, YouTubeCollector, NewsAPICollector
 from .processing import ArticleSummarizer, ArticleCategorizer, Deduplicator
+from .delivery import TelegramSender, EmailSender
 
 app = FastAPI(title="AI News Aggregator")
 
@@ -20,6 +21,8 @@ collectors = [
 deduplicator = Deduplicator()
 summarizer = ArticleSummarizer()
 categorizer = ArticleCategorizer()
+telegram_sender = TelegramSender()
+email_sender = EmailSender()
 
 
 @app.get("/")
@@ -71,4 +74,20 @@ async def run_pipeline() -> Digest:
     categorized.sort(key=lambda x: x.importance, reverse=True)
     print(f"[categorize] Categorized {len(categorized)} articles")
 
-    return Digest(articles=categorized, total_count=len(categorized))
+    digest = Digest(articles=categorized, total_count=len(categorized))
+
+    # Send via Telegram
+    try:
+        await telegram_sender.send(digest)
+        print("[telegram] Digest sent")
+    except Exception as e:
+        print(f"[telegram] Error: {e}")
+
+    # Send via Email
+    try:
+        email_sender.send(digest)
+        print("[email] Digest sent")
+    except Exception as e:
+        print(f"[email] Error: {e}")
+
+    return digest
