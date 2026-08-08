@@ -90,7 +90,3 @@ Open http://localhost:8000/docs for Swagger UI.
 ## Development
 
 See [docs/phases.md](docs/phases.md) for the implementation roadmap.
-
-## License
-
-MIT

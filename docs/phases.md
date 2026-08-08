@@ -26,10 +26,11 @@
 
 ## Phase 3: Processing Layer (Day 3)
 
-- [ ] Set up Gemini API client (`processing/gemini_client.py`)
-- [ ] Build summarizer with prompt templates (`processing/summarizer.py`)
-- [ ] Build categorizer for article tagging (`processing/categorizer.py`)
-- [ ] Build deduplicator with JSON persistence (`processing/deduplicator.py`)
+- [x] Set up Gemini API client (`processing/gemini_client.py`)
+- [x] Build summarizer with prompt templates (`processing/summarizer.py`)
+- [x] Build categorizer for article tagging (`processing/categorizer.py`)
+- [x] Build deduplicator with JSON persistence (`processing/deduplicator.py`)
+- [x] Add rate limiting (2s delay between API calls)
 
 ## Phase 4: Delivery Layer (Day 4)
 
