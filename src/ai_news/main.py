@@ -6,6 +6,7 @@ Learn: FastAPI basics, routes, async endpoints
 from fastapi import FastAPI
 from .models import Digest
 from .research import RSSCollector, GitHubCollector, YouTubeCollector, NewsAPICollector
+from .processing import ArticleSummarizer, ArticleCategorizer, Deduplicator
 
 app = FastAPI(title="AI News Aggregator")
 
@@ -15,6 +16,10 @@ collectors = [
     YouTubeCollector(),
     NewsAPICollector(),
 ]
+
+deduplicator = Deduplicator()
+summarizer = ArticleSummarizer()
+categorizer = ArticleCategorizer()
 
 
 @app.get("/")
@@ -30,7 +35,20 @@ async def health():
 @app.post("/trigger")
 async def trigger():
     digest = await run_pipeline()
-    return {"status": "completed", "articles": len(digest.articles)}
+    return {
+        "status": "completed",
+        "total_collected": digest.total_count,
+        "articles": [
+            {
+                "title": a.title,
+                "url": a.url,
+                "source": a.source,
+                "category": a.category.value,
+                "summary": a.summary,
+            }
+            for a in digest.articles
+        ],
+    }
 
 
 async def run_pipeline() -> Digest:
@@ -43,4 +61,14 @@ async def run_pipeline() -> Digest:
         except Exception as e:
             print(f"[{collector.name}] Error: {e}")
 
-    return Digest(articles=all_articles, total_count=len(all_articles))
+    new_articles = deduplicator.filter_new(all_articles)
+    print(f"[dedup] {len(all_articles)} total, {len(new_articles)} new")
+
+    summarized = await summarizer.batch_summarize(new_articles)
+    print(f"[summarize] Summarized {len(summarized)} articles")
+
+    categorized = await categorizer.batch_categorize(summarized)
+    categorized.sort(key=lambda x: x.importance, reverse=True)
+    print(f"[categorize] Categorized {len(categorized)} articles")
+
+    return Digest(articles=categorized, total_count=len(categorized))
