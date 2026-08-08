@@ -34,11 +34,11 @@
 
 ## Phase 4: Delivery Layer (Day 4)
 
-- [ ] Set up Telegram bot via BotFather
-- [ ] Implement Telegram message formatter (`delivery/telegram_bot.py`)
-- [ ] Set up Gmail SMTP with app password
-- [ ] Create HTML email template (`templates/digest_email.html`)
-- [ ] Implement email sender (`delivery/email_sender.py`)
+- [x] Set up Telegram bot via BotFather
+- [x] Implement Telegram message formatter (`delivery/telegram_bot.py`)
+- [x] Set up Gmail SMTP with app password
+- [x] Create HTML email template (`templates/digest_email.html`)
+- [x] Implement email sender (`delivery/email_sender.py`)
 
 ## Phase 5: Scheduler + Polish (Day 5)
 
